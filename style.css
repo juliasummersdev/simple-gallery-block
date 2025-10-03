@@ -1,6 +1,7 @@
 .mosaic-gallery-container
 {
-	padding: 0 5px calc(2rem - 5px) 5px;
+	margin: 0 -5px;
+	padding: 0 0 calc(2rem) 0;
 }
 
 .mosaic-gallery
