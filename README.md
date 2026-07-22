@@ -40,7 +40,7 @@ A WordPress plugin that creates a masonry gallery block with lightbox support fo
 ### Adding a Gallery Block
 
 1. In the WordPress editor, add a new block
-2. Search for **Simple Gallery** or /simple to select from block options 
+2. Search for **Simple Gallery** or type /simple to select from block options 
 3. Click **Add Images** to select images from your media library
 4. Adjust columns in the block sidebar (optional - uses global default if not changed)
 
