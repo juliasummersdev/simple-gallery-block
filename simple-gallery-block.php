@@ -31,6 +31,25 @@ function jsdev_simple_gallery_block_add_settings_link($links)
 }
 
 /**
+ * Modify plugin row meta to open links in new window
+ */
+add_filter('plugin_row_meta', 'jsdev_simple_gallery_block_modify_plugin_row_meta', 10, 2);
+function jsdev_simple_gallery_block_modify_plugin_row_meta($links, $file)
+{
+    if ($file === plugin_basename(__FILE__)) {
+        // Make all links open in new window
+        $links = array_map(function($link) {
+            // Add target="_blank" to links that don't already have it
+            if (strpos($link, 'target=') === false && strpos($link, '<a ') !== false) {
+                $link = str_replace('<a ', '<a target="_blank" ', $link);
+            }
+            return $link;
+        }, $links);
+    }
+    return $links;
+}
+
+/**
  * Remove Powerkit Justified Gallery scripts and styles
  */
 add_action('wp_enqueue_scripts', 'jsdev_remove_powerkit_justified_gallery_assets', 100);
