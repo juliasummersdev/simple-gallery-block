@@ -969,21 +969,85 @@
     }, o.makeJQueryPlugin(), o
 });
 
+// Store Masonry instances for each gallery
+window.masonryInstances = window.masonryInstances || {};
+
 // Initialize Masonry
 document.addEventListener('DOMContentLoaded', function () {
-    const grid = document.querySelector('.mosaic-gallery');
-    if (!grid) return;
-    
-    imagesLoaded(grid, function () {
-        // Delay Masonry to let layout fully settle
-        setTimeout(function () {
-            new Masonry(grid, {
-                itemSelector: '.sm-gallery-item',
-                columnWidth: '.sm-gallery-sizer',
-                percentPosition: true,
-                gutter: 0
+    const grids = document.querySelectorAll('.mosaic-gallery');
+    if (!grids.length) return;
+
+    let initializedCount = 0;
+    const totalGrids = grids.length;
+
+    grids.forEach(function(grid) {
+        // Check if this is a lazy-loaded gallery (below fold)
+        const isLazyGallery = grid.getAttribute('data-lazy-gallery') === 'true';
+
+        function initMasonry() {
+            imagesLoaded(grid, function () {
+                const masonryInstance = new Masonry(grid, {
+                    itemSelector: '.sm-gallery-item',
+                    columnWidth: '.sm-gallery-sizer',
+                    percentPosition: true,
+                    gutter: 0
+                });
+
+                // Store instance by gallery ID
+                if (grid.id) {
+                    window.masonryInstances[grid.id] = masonryInstance;
+                }
+
+                // Track layout completion
+                let layoutCompleted = false;
+
+                // Listen for Masonry layoutComplete event
+                masonryInstance.on('layoutComplete', function() {
+                    if (!layoutCompleted) {
+                        layoutCompleted = true;
+
+                        // Increment counter and trigger overlay positioning when all galleries are ready
+                        initializedCount++;
+                        if (initializedCount === totalGrids) {
+                            // Dispatch custom event when all Masonry instances have completed layout
+                            window.dispatchEvent(new CustomEvent('allMasonryInitialized'));
+                        }
+                    }
+                });
+
+                // Trigger initial layout (this will fire layoutComplete event)
+                masonryInstance.layout();
+
+                // For lazy-loaded galleries, watch for when images actually load
+                if (isLazyGallery) {
+                    const images = grid.querySelectorAll('img[loading="lazy"]');
+                    if (images.length > 0) {
+                        imagesLoaded(grid, function() {
+                            masonryInstance.layout();
+                            // Re-position overlays after lazy images load
+                            window.dispatchEvent(new CustomEvent('galleryImagesLoaded', { detail: { galleryId: grid.id }}));
+                        });
+                    }
+                }
             });
-        }, 0); // Can increase to 200 if needed
+        }
+
+        if (isLazyGallery) {
+            // For below-fold galleries, only initialize when near viewport
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        initMasonry();
+                        observer.unobserve(grid);
+                    }
+                });
+            }, { rootMargin: '400px' }); // Start initializing 400px before entering viewport
+
+            observer.observe(grid);
+        } else {
+            // For above-fold galleries, initialize immediately
+            initMasonry();
+        }
     });
     
     try {
@@ -1012,9 +1076,6 @@ document.addEventListener('DOMContentLoaded', function () {
             dragToleranceX: 40,
             dragToleranceY: 40
         });
-        
-        console.log('GLightbox reinitialized successfully');
     } catch (error) {
-        console.error('Error reinitializing GLightbox:', error);
     }
 });

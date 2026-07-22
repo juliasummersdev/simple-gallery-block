@@ -1,0 +1,275 @@
+.mosaic-gallery-container
+{
+	margin: 0 -5px;
+	padding: 0 0 calc(2rem) 0;
+	clear: both;
+	overflow: visible;
+}
+
+.mosaic-gallery
+{
+	position: relative;
+	max-width: 100%;
+	width: 100%;
+	overflow: visible;
+}
+
+/* Clearfix for floated gallery items */
+.mosaic-gallery::after
+{
+	content: "";
+	display: table;
+	clear: both;
+}
+
+/* Ensure proper clearing after gallery expansion */
+.mosaic-gallery-container::after
+{
+	content: "";
+	display: table;
+	clear: both;
+}
+
+/* Sizer defines the column width */
+.sm-gallery-sizer
+{
+	width: 25%;
+}
+
+/* Items inherit the sizer's width */
+.sm-gallery-item
+{
+	width: 25%;
+	float: left;
+	padding: 0 5px;
+	margin-bottom: 10px;
+	box-sizing: border-box;
+	position: relative;
+}
+
+.sm-gallery-item figure
+{
+	overflow: hidden;
+	margin: 0;
+}
+
+.sm-gallery-item img
+{
+	display: block;
+	width: 100%;
+	height: auto;
+	transition: transform 0.3s ease;
+}
+
+/* Hover Effect */
+.mosaic-gallery .sm-gallery-item:hover img
+{
+	transform: scale(1.03);
+}
+
+.pk-scroll-to-top .pk-icon,
+.pk-icon .pk-icon-up,
+.pk-icon-up
+{
+	transition: transform 1s ease !important;
+}
+
+.pk-scroll-to-top
+{
+	display: inline-block;
+}
+
+.pk-scroll-to-top.pk-active
+{
+	opacity: .7;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1200px)
+{
+	.sm-gallery-sizer,
+	.sm-gallery-item
+	{
+		width: 33.333%;
+	}
+}
+
+@media (max-width: 768px)
+{
+	.sm-gallery-sizer,
+	.sm-gallery-item
+	{
+		width: 50%;
+	}
+}
+
+@media (max-width: 480px)
+{
+	.sm-gallery-sizer,
+	.sm-gallery-item
+	{
+		width: 50%;
+	}
+}
+
+/* Container positioning */
+.mosaic-gallery-container
+{
+	position: relative;
+}
+
+/* Clip container height when showing limited images */
+.mosaic-gallery-container.has-show-more
+{
+	overflow: hidden;
+}
+
+/* Sliding overlay that covers bottom portion of gallery */
+.gallery-sliding-overlay
+{
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: #000000;
+	z-index: 100;
+	transform: translateY(0);
+}
+
+/* Gradient at top of sliding overlay */
+.gallery-overlay-gradient
+{
+	position: absolute;
+	top: -150px;
+	left: 0;
+	right: 0;
+	height: 150px;
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+	pointer-events: none;
+}
+
+/* Show more button container */
+.gallery-show-more-container
+{
+	position: relative;
+	width: 100%;
+	padding: 1rem 0;
+	text-align: center;
+}
+
+/* Show more button - matching .taxonomy-category style */
+.gallery-show-more-button
+{
+	display: inline-block;
+	padding: 0.4rem .75rem .3rem;
+	background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+	border-radius: 5px;
+	text-transform: uppercase;
+	color: #ffffff;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-family: inherit;
+}
+
+.gallery-show-more-button:hover
+{
+	opacity: 0.9;
+	transform: translateY(-1px);
+}
+
+.gallery-show-more-button:active
+{
+	transform: translateY(0);
+}
+
+.gallery-show-more-text
+{
+	color: #ffffff;
+}
+
+/* Make sure links are properly positioned */
+.sm-gallery-item a
+{
+	display: block;
+	position: relative;
+	overflow: hidden;
+}
+
+/* Ensure GLightbox navigation arrows are visible on mobile */
+.gslide-description,
+.gdesc-inner,
+.gslide-title,
+.gslide-desc
+{
+	display: none !important;
+}
+
+.glightbox-container .gslide-media
+{
+	width: 100%;
+}
+
+/* Force show prev/next buttons on all devices - override GLightbox mobile hiding */
+.glightbox-container .gprev,
+.glightbox-container .gnext,
+.glightbox-clean .gprev,
+.glightbox-clean .gnext,
+.glightbox-mobile .gprev,
+.glightbox-mobile .gnext,
+body .glightbox-container .gprev,
+body .glightbox-container .gnext
+{
+	display: flex !important;
+	opacity: 1 !important;
+	visibility: visible !important;
+	pointer-events: auto !important;
+}
+
+/* Prevent hiding with glightbox-button-hidden class */
+.gprev.glightbox-button-hidden,
+.gnext.glightbox-button-hidden
+{
+	display: flex !important;
+	opacity: 1 !important;
+	visibility: visible !important;
+}
+
+/* Mobile specific navigation styling */
+@media (max-width: 768px)
+{
+	.glightbox-container .gprev,
+	.glightbox-container .gnext,
+	.glightbox-clean .gprev,
+	.glightbox-clean .gnext,
+	.glightbox-mobile .gprev,
+	.glightbox-mobile .gnext,
+	body .glightbox-container .gprev,
+	body .glightbox-container .gnext
+	{
+		display: flex !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+		width: 50px !important;
+		height: 50px !important;
+		align-items: center;
+		justify-content: center;
+		pointer-events: auto !important;
+		z-index: 99999 !important;
+		background: rgba(0, 0, 0, 0.5) !important;
+		border-radius: 4px !important;
+		top: 46% !important;
+	}
+
+	.glightbox-container .gprev svg,
+	.glightbox-container .gnext svg,
+	.glightbox-clean .gprev svg,
+	.glightbox-clean .gnext svg,
+	.glightbox-mobile .gprev svg,
+	.glightbox-mobile .gnext svg
+	{
+		width: 30px !important;
+		height: 30px !important;
+		display: block !important;
+	}
+}
